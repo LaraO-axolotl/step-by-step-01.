@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Managing Problems worksheet</title>
+<style>
+:root{color-scheme:light;--ink:#1a1a1c;--mute:#55555c;--bg:#fbfaf7;--line:#d9d6cd;--teal:#1c2f5a;--blue:#b3362b;--grey:#8c8c90;--tint:#f2f0ea;--on:#fff}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.95 "Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic","Noto Sans JP",system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.03em}
+.wrap{max-width:660px;margin:0 auto;padding:48px 24px 72px}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:16px;flex-wrap:wrap}
+h1,h2{font-family:"Hiragino Mincho ProN","Yu Mincho","Noto Serif JP",Georgia,serif;font-weight:400;letter-spacing:.1em}
+h1{font-size:24px;margin:0 0 8px}
+h2{font-size:20px;margin:0 0 20px}
+.sub{color:var(--mute);font-size:13px;margin:0 0 40px;max-width:52ch}
+.grid{display:block}
+.rail{display:flex;gap:4px;justify-content:center;flex-wrap:wrap;align-items:baseline;margin:0 0 44px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.rail button{border:0;background:none;color:var(--grey);font:inherit;font-size:0;cursor:pointer;padding:4px 8px;letter-spacing:.06em}
+.rail button b{font-size:13px;font-weight:400;display:inline}
+.rail button.on{color:var(--ink);font-size:13px}
+.rail button.on b{color:var(--teal);font-weight:600;margin-inline-end:8px}
+.rail button.done b{color:var(--teal)}
+.panel{background:none;border:0;padding:0}
+p{margin:0 0 14px;max-width:62ch}
+.tip{border-left:1px solid var(--ink);padding:2px 0 2px 16px;margin:20px 0;font-size:13px;color:var(--mute);max-width:62ch}
+label{display:block;font-weight:500;font-size:14px;margin:28px 0 6px}
+input[type=text],textarea,select{width:100%;font:inherit;letter-spacing:inherit;padding:8px 2px;border:0;border-bottom:1px solid var(--ink);border-radius:0;background:transparent;color:var(--ink)}
+textarea{border:1px solid var(--line);padding:10px 12px;min-height:84px;resize:vertical;line-height:1.8}
+::placeholder{color:#8a8a90}
+input[type=checkbox],input[type=radio]{accent-color:var(--teal);margin-top:7px}
+button{font:inherit}
+.btn{background:var(--teal);color:var(--on);border:1px solid var(--teal);border-radius:0;padding:9px 28px;cursor:pointer;letter-spacing:.12em;font-size:14px}
+.btn.alt{background:none;color:var(--teal)}
+.btn.x{background:none;color:var(--mute);border:0;padding:4px 6px;font-size:13px;letter-spacing:.03em}
+:focus-visible{outline:2px solid var(--teal);outline-offset:3px}
+.row{display:flex;gap:12px;align-items:center;margin:16px 0;flex-wrap:wrap}
+.row>input[type=text]{flex:1 1 220px;width:auto}.row>select,.item select,.top select{width:auto}
+.top select{border-bottom-color:var(--line);font-size:13px}
+.chips{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 28px}
+.chip{border:0;border-bottom:1px solid var(--line);background:none;padding:0 2px;font:inherit;font-size:13px;color:var(--mute);cursor:pointer;text-align:start}
+.chip:hover{color:var(--teal);border-bottom-color:var(--teal)}
+.item{display:flex;gap:12px;align-items:center;flex-wrap:wrap;border-bottom:1px solid var(--line);padding:12px 0}
+.item::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--grey);flex:none}
+.item.solvable::before{background:var(--teal)}.item.unsolvable::before{background:var(--blue)}.item.dim{opacity:.55}
+.item span{flex:1 1 200px}
+.item select{font-size:13px;border-bottom-color:var(--line)}
+.nav{display:flex;justify-content:space-between;margin-top:56px;gap:8px;flex-wrap:wrap}
+.err{color:var(--blue);min-height:22px;margin:12px 0 0;font-size:13px}
+.opt{display:flex;gap:10px;font-weight:400;margin:6px 0;align-items:flex-start}
+.card{border-bottom:1px solid var(--line);padding:14px 0;margin:0}
+.card[data-act=pick]{cursor:pointer;padding:14px 10px}
+.card[data-act=pick]:hover{background:var(--tint)}
+.card.pick{border-bottom:2px solid var(--teal);background:var(--tint)}
+.sel{color:var(--blue);font-size:12px;letter-spacing:.2em}
+.scale{border:0;padding:0;margin:0 0 36px}
+.scale legend{padding:0;margin-bottom:14px;font-weight:500}
+.sc{display:flex;gap:8px;flex-wrap:wrap}
+.sc button{width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--ink);cursor:pointer;font-size:13px;padding:0}
+.sc button:hover{border-color:var(--teal)}
+.sc button.on{background:var(--teal);color:var(--on);border-color:var(--teal)}
+.lab{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--mute);margin-top:10px}
+.ex{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:16px 0;margin:28px 0;font-size:13px;color:var(--mute)}
+.tw{overflow-x:auto}
+.ex table{width:100%;border-collapse:collapse;margin-top:10px}
+.ex th,.ex td{text-align:start;padding:6px 10px 6px 0;border-top:1px solid var(--line);vertical-align:top}
+.ex th{font-weight:400;color:var(--grey)}
+.ex td{color:var(--ink)}
+.foot{color:var(--mute);font-size:12px;margin-top:64px;padding-top:20px;border-top:1px solid var(--line);max-width:62ch}
+.cols{display:grid;grid-template-columns:repeat(3,1fr);gap:28px;font-size:13px;color:var(--mute)}
+.cols.cols2{grid-template-columns:repeat(2,1fr)}
+@media(max-width:720px){.cols,.cols.cols2{grid-template-columns:1fr;gap:16px}.wrap{padding:32px 20px 56px}}
+@media(prefers-reduced-motion:no-preference){.mascot svg{animation:bob 3.4s ease-in-out infinite}@keyframes bob{50%{transform:translateY(-3px)}}}
+.mascot{display:flex;gap:18px;align-items:center;margin:0 0 36px}
+.mascot svg{flex:none}
+.say{position:relative;margin:0;font-size:13px;color:var(--mute);background:#fff;border:1px solid var(--line);padding:10px 16px;max-width:46ch}
+.say::before{content:"";position:absolute;left:-5px;top:50%;width:9px;height:9px;background:#fff;border-left:1px solid var(--line);border-bottom:1px solid var(--line);transform:translateY(-50%) rotate(45deg)}
+[dir=rtl] .say::before{left:auto;right:-5px;transform:translateY(-50%) rotate(-135deg)}
+[dir=rtl] .tip{border-left:0;border-right:1px solid var(--ink);padding:2px 16px 2px 0}
+@media print{.rail,.nav,.btn,.top select,.mascot{display:none}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top"><h1>Managing Problems</h1><select id="lang" aria-label="Language"><option value="en">English</option><option value="fr">Français</option><option value="uk">Українська</option><option value="ru">Русский</option><option value="ar">العربية</option><option value="tr">Türkçe</option></select></div>
+<p class="sub">A step-by-step worksheet adapted from the WHO "Managing Problems" strategy (PM+ manual, ch. 7). It helps you sort your problems, choose one, and make a small plan. Nothing leaves your browser.</p>
+<div class="grid"><nav class="rail" id="rail" aria-label="Steps"></nav><main class="panel" id="main"></main></div>
+<p class="foot">Self-reflection tool, not therapy or medical advice. If you feel hopeless, very low or unsafe, please talk to a health professional or someone you trust. Adapted from: WHO (2018), Problem Management Plus (PM+), Chapter 7.</p>
+</div>
+<script>
+const STEPS=['List problems','Choose a problem','Define it','Brainstorm','Decide and choose','Action plan','Review'];
+const EX=['I am worried about money and bills','I keep arguing with someone close to me','I do not have a job','I feel too tired to do things I used to enjoy','I am behind on my studies or work','I have stopped seeing my friends'];
+const blank=()=>({step:0,problems:[],chosen:null,def:{when:'',look:'',diff:'',text:''},ideas:[],plan:[],rev:{did:'',effect:'',hard:'',next:''},round:1,past:[],score0:null,score1:null,lang:'en'});
+let S=blank();
+try{const s=localStorage.getItem('mp-sm');if(s)S=Object.assign(blank(),JSON.parse(s))}catch(e){}
+S.problems.forEach(p=>{if(p.c==='unimportant'){p.c='solvable';p.imp='unimportant'}if(!p.imp)p.imp='important'});
+const save=()=>{try{localStorage.setItem('mp-sm',JSON.stringify(S))}catch(e){}};
+const esc=t=>String(t).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const $=id=>document.getElementById(id);
+const solv=()=>S.problems.map((p,i)=>({...p,i})).filter(p=>p.c==='solvable'&&p.imp!=='unimportant');
+const picks=()=>S.ideas.filter(x=>x.pick);
+
+const ROWS=[
+['Managing Problems','Gérer les problèmes','Управління проблемами','Управление проблемами','إدارة المشكلات','Sorunları Yönetme'],
+['A step-by-step worksheet adapted from the WHO "Managing Problems" strategy (PM+ manual, ch. 7). It helps you sort your problems, choose one, and make a small plan. Nothing leaves your browser.','Une fiche pas à pas adaptée de la stratégie « Gérer les problèmes » de l’OMS (manuel PM+, chap. 7). Elle vous aide à classer vos problèmes, à en choisir un et à faire un petit plan. Rien ne quitte votre navigateur.','Покрокова робоча форма, адаптована зі стратегії ВООЗ «Управління проблемами» (посібник PM+, розд. 7). Вона допомагає розсортувати ваші проблеми, обрати одну та скласти невеликий план. Дані не залишають ваш браузер.','Пошаговая рабочая форма, адаптированная из стратегии ВОЗ «Управление проблемами» (руководство PM+, гл. 7). Она помогает рассортировать ваши проблемы, выбрать одну и составить небольшой план. Данные не покидают ваш браузер.','ورقة عمل خطوة بخطوة مقتبسة من استراتيجية «إدارة المشكلات» لمنظمة الصحة العالمية (دليل PM+، الفصل 7). تساعدك على تصنيف مشكلاتك واختيار إحداها ووضع خطة صغيرة. لا تغادر بياناتك متصفحك.','DSÖ’nün “Sorunları Yönetme” stratejisinden uyarlanmış adım adım bir çalışma formu (PM+ kılavuzu, 7. bölüm). Sorunlarınızı sıralamanıza, birini seçmenize ve küçük bir plan yapmanıza yardımcı olur. Hiçbir veri tarayıcınızdan çıkmaz.'],
+['Self-reflection tool, not therapy or medical advice. If you feel hopeless, very low or unsafe, please talk to a health professional or someone you trust. Adapted from: WHO (2018), Problem Management Plus (PM+), Chapter 7.','Outil de réflexion personnelle, pas une thérapie ni un avis médical. Si vous vous sentez désespéré(e), très mal ou en danger, parlez à un professionnel de santé ou à une personne de confiance. Adapté de : OMS (2018), Problem Management Plus (PM+), chapitre 7.','Інструмент для самоаналізу, а не терапія чи медична порада. Якщо ви відчуваєте безнадію, сильний занепад сил або небезпеку, зверніться до фахівця з охорони здоров’я чи до людини, якій довіряєте. Адаптовано з: ВООЗ (2018), Problem Management Plus (PM+), розділ 7.','Инструмент для самоанализа, а не терапия и не медицинская консультация. Если вы чувствуете безнадёжность, сильный упадок сил или опасность, обратитесь к специалисту или к человеку, которому доверяете. Адаптировано из: ВОЗ (2018), Problem Management Plus (PM+), глава 7.','أداة للتأمل الذاتي، وليست علاجًا أو نصيحة طبية. إذا شعرت باليأس أو الحزن الشديد أو عدم الأمان، فتحدّث إلى مختص صحي أو شخص تثق به. مقتبس من: منظمة الصحة العالمية (2018)، Problem Management Plus (PM+)، الفصل 7.','Bu bir kendini değerlendirme aracıdır; terapi veya tıbbi tavsiye değildir. Umutsuz, çok kötü veya güvende değilseniz bir sağlık uzmanıyla ya da güvendiğiniz biriyle konuşun. Kaynak: DSÖ (2018), Problem Management Plus (PM+), 7. bölüm.'],
+['Steps','Étapes','Кроки','Шаги','الخطوات','Adımlar'],
+['Language','Langue','Мова','Язык','اللغة','Dil'],
+['List problems','Lister les problèmes','Перелік проблем','Список проблем','قائمة المشكلات','Sorunları listele'],
+['Choose a problem','Choisir un problème','Вибір проблеми','Выбор проблемы','اختيار مشكلة','Sorun seç'],
+['Define it','La définir','Визначення','Определение','التحديد','Tanımla'],
+['Brainstorm','Remue-méninges','Мозковий штурм','Мозговой штурм','العصف الذهني','Beyin fırtınası'],
+['Decide and choose','Décider et choisir','Рішення та вибір','Решение и выбор','القرار والاختيار','Karar ver ve seç'],
+['Action plan','Plan d’action','План дій','План действий','خطة العمل','Eylem planı'],
+['Review','Bilan','Огляд','Обзор','المراجعة','Gözden geçirme'],
+['Back','Retour','Назад','Назад','رجوع','Geri'],
+['Next','Suivant','Далі','Далее','التالي','İleri'],
+['Give your score first.','Donnez d’abord votre note.','Спочатку поставте оцінку.','Сначала поставьте оценку.','أعطِ درجتك أولًا.','Önce puanınızı verin.'],
+['Add at least one problem that is both solvable and important.','Ajoutez au moins un problème à la fois soluble et important.','Додайте принаймні одну проблему, яка і вирішувана, і важлива.','Добавьте хотя бы одну проблему, которая и разрешима, и важна.','أضف مشكلة واحدة على الأقل قابلة للحل ومهمة.','En az bir tane hem çözülebilir hem önemli sorun ekleyin.'],
+['Choose one problem.','Choisissez un problème.','Оберіть одну проблему.','Выберите одну проблему.','اختر مشكلة واحدة.','Bir sorun seçin.'],
+['Define your problem and write how it makes you feel','Définissez votre problème et écrivez ce que vous ressentez','Опишіть свою проблему та напишіть, що ви відчуваєте через неї','Опишите свою проблему и напишите, что вы из-за неё чувствуете','عرّف مشكلتك واكتب كيف تشعرك','Sorununuzu tanımlayın ve size nasıl hissettirdiğini yazın'],
+['Add at least two ideas.','Ajoutez au moins deux idées.','Додайте принаймні дві ідеї.','Добавьте хотя бы две идеи.','أضف فكرتين على الأقل.','En az iki fikir ekleyin.'],
+['Choose at least one idea.','Choisissez au moins une idée.','Оберіть принаймні одну ідею.','Выберите хотя бы одну идею.','اختر فكرة واحدة على الأقل.','En az bir fikir seçin.'],
+['Add at least one step with a day and time.','Ajoutez au moins une étape avec un jour et une heure.','Додайте принаймні один крок із днем і часом.','Добавьте хотя бы один шаг с днём и временем.','أضف خطوة واحدة على الأقل مع اليوم والوقت.','Gün ve saat içeren en az bir adım ekleyin.'],
+['1. List your problems','1. Listez vos problèmes','1. Перелічіть свої проблеми','1. Перечислите свои проблемы','1. اكتب قائمة بمشكلاتك','1. Sorunlarınızı listeleyin'],
+['Before you start: how do you feel about being able to solve your problems? Give a score.','Avant de commencer : dans quelle mesure vous sentez-vous capable de résoudre vos problèmes ? Donnez une note.','Перш ніж почати: наскільки ви відчуваєте, що здатні розв’язати свої проблеми? Поставте оцінку.','Прежде чем начать: насколько вы чувствуете, что способны решить свои проблемы? Поставьте оценку.','قبل أن تبدأ: ما مدى شعورك بقدرتك على حل مشكلاتك؟ أعطِ درجة.','Başlamadan önce: sorunlarınızı çözebileceğinizi ne kadar hissediyorsunuz? Bir puan verin.'],
+['0 = not at all able','0 = pas du tout capable','0 = зовсім не здатен(на)','0 = совсем не способен(на)','0 = غير قادر إطلاقًا','0 = hiç yapamam'],
+['10 = completely able','10 = tout à fait capable','10 = цілком здатен(на)','10 = полностью способен(на)','10 = قادر تمامًا','10 = kesinlikle yapabilirim'],
+['Write down the problems or concerns you have right now, big or small. Then tag each one twice:','Notez les problèmes ou préoccupations que vous avez en ce moment, grands ou petits. Puis attribuez deux étiquettes à chacun :','Запишіть проблеми чи тривоги, які у вас є зараз, великі чи малі. Потім позначте кожну двома тегами:','Запишите проблемы или тревоги, которые есть у вас сейчас, большие или малые. Затем отметьте каждую двумя тегами:','اكتب المشكلات أو المخاوف التي لديك الآن، كبيرة كانت أم صغيرة. ثم ضع لكل منها وسمين:','Şu anda yaşadığınız büyük ya da küçük sorunları veya kaygıları yazın. Sonra her birine iki etiket verin:'],
+['Solvable or unsolvable','Soluble ou insoluble','Вирішувана чи невирішувана','Разрешима или неразрешима','قابلة للحل أو غير قابلة','Çözülebilir veya çözülemez'],
+['Solvable: you have some control or influence, even over just part of it. Unsolvable: you cannot change it. Check whether any part of it can be changed, often how you respond to it.','Soluble : vous avez un certain contrôle ou une certaine influence, même sur une partie seulement. Insoluble : vous ne pouvez pas le changer. Vérifiez si une partie peut changer, souvent votre façon d’y réagir.','Вирішувана: ви маєте певний контроль чи вплив, хоча б на її частину. Невирішувана: ви не можете її змінити. Перевірте, чи можна змінити якусь її частину, часто це ваша реакція на неї.','Разрешима: у вас есть некоторый контроль или влияние, хотя бы на её часть. Неразрешима: вы не можете её изменить. Проверьте, можно ли изменить какую-то её часть, часто это ваша реакция на неё.','قابلة للحل: لديك بعض السيطرة أو التأثير، ولو على جزء منها. غير قابلة للحل: لا يمكنك تغييرها. تحقق مما إذا كان يمكن تغيير جزء منها، وغالبًا ما يكون طريقة استجابتك لها.','Çözülebilir: bir kısmı üzerinde bile olsa kontrolünüz veya etkiniz var. Çözülemez: onu değiştiremezsiniz. Bir kısmının değişip değişemeyeceğine bakın; çoğu zaman bu, ona verdiğiniz tepkidir.'],
+['Important or unimportant','Important ou sans importance','Важлива чи неважлива','Важная или неважная','مهمة أو غير مهمة','Önemli veya önemsiz'],
+['Important: it matters to you and is causing you concern. Unimportant: not a concern for you right now.','Important : il compte pour vous et vous préoccupe. Sans importance : il ne vous préoccupe pas en ce moment.','Важлива: вона має значення для вас і турбує вас. Неважлива: зараз вона вас не турбує.','Важная: она значима для вас и беспокоит вас. Неважная: сейчас она вас не беспокоит.','مهمة: تعنيك وتسبب لك القلق. غير مهمة: لا تقلقك الآن.','Önemli: sizin için önemli ve sizi endişelendiriyor. Önemsiz: şu anda sizi ilgilendirmiyor.'],
+['You will work on a problem that is both important and solvable. Feeling like nothing can be solved is common. If you doubt a problem is solvable, ask: "is there any part of this I could influence?"','Vous travaillerez sur un problème à la fois important et soluble. Il est fréquent de sentir que rien ne peut se résoudre. Si vous doutez qu’un problème soit soluble, demandez-vous : « y a-t-il une partie sur laquelle je peux agir ? »','Ви працюватимете над проблемою, яка і важлива, і вирішувана. Відчуття, що нічого не можна вирішити, — звичайне. Якщо сумніваєтесь, чи вирішувана проблема, запитайте себе: «чи є частина, на яку я можу вплинути?»','Вы будете работать над проблемой, которая и важна, и разрешима. Чувство, что ничего нельзя решить, — обычное. Если сомневаетесь, разрешима ли проблема, спросите себя: «есть ли часть, на которую я могу повлиять?»','ستعمل على مشكلة مهمة وقابلة للحل في الوقت نفسه. من الشائع أن تشعر أنه لا يمكن حل أي شيء. إذا شككت في إمكانية حل مشكلة، فاسأل نفسك: «هل هناك جزء منها يمكنني التأثير فيه؟»','Hem önemli hem de çözülebilir bir sorun üzerinde çalışacaksınız. Hiçbir şeyin çözülemeyeceğini hissetmek yaygındır. Bir sorunun çözülebilirliğinden şüphe ediyorsanız şunu sorun: “Bunun etkileyebileceğim bir kısmı var mı?”'],
+['Describe a problem','Décrivez un problème','Опишіть проблему','Опишите проблему','صف مشكلة','Bir sorunu açıklayın'],
+['New problem','Nouveau problème','Нова проблема','Новая проблема','مشكلة جديدة','Yeni sorun'],
+['Solvable','Soluble','Вирішувана','Разрешима','قابلة للحل','Çözülebilir'],
+['Unsolvable','Insoluble','Невирішувана','Неразрешима','غير قابلة للحل','Çözülemez'],
+['Important','Important','Важлива','Важная','مهمة','Önemli'],
+['Unimportant','Sans importance','Неважлива','Неважная','غير مهمة','Önemsiz'],
+['Add','Ajouter','Додати','Добавить','إضافة','Ekle'],
+['Remove','Supprimer','Видалити','Удалить','حذف','Kaldır'],
+['I am worried about money and bills','Je m’inquiète pour l’argent et les factures','Я переживаю через гроші та рахунки','Я беспокоюсь из-за денег и счетов','أنا قلق بشأن المال والفواتير','Para ve faturalar konusunda endişeliyim'],
+['I keep arguing with someone close to me','Je me dispute sans cesse avec un proche','Я постійно сварюся з близькою людиною','Я постоянно ссорюсь с близким человеком','أستمر في الشجار مع شخص مقرّب مني','Yakınımdaki biriyle sürekli tartışıyorum'],
+['I do not have a job','Je n’ai pas de travail','У мене немає роботи','У меня нет работы','ليس لدي عمل','İşim yok'],
+['I feel too tired to do things I used to enjoy','Je me sens trop fatigué(e) pour faire ce que j’aimais','Я надто втомлений(а), щоб робити те, що мені подобалося','Я слишком устаю, чтобы делать то, что мне нравилось','أشعر بتعب شديد يمنعني من فعل ما كنت أستمتع به','Eskiden keyif aldığım şeyleri yapamayacak kadar yorgunum'],
+['I am behind on my studies or work','J’ai du retard dans mes études ou mon travail','Я відстаю в навчанні чи роботі','Я отстаю в учёбе или работе','أنا متأخر في دراستي أو عملي','Derslerimde veya işimde geri kaldım'],
+['I have stopped seeing my friends','J’ai arrêté de voir mes amis','Я перестав(ла) бачитися з друзями','Я перестал(а) встречаться с друзьями','توقفت عن رؤية أصدقائي','Arkadaşlarımı görmeyi bıraktım'],
+['No problems listed yet. Add one above or tap an example.','Aucun problème pour l’instant. Ajoutez-en un ci-dessus ou touchez un exemple.','Проблем поки немає. Додайте вище або натисніть приклад.','Проблем пока нет. Добавьте выше или нажмите на пример.','لا توجد مشكلات بعد. أضف واحدة أعلاه أو اضغط على مثال.','Henüz sorun yok. Yukarıdan ekleyin veya bir örneğe dokunun.'],
+['2. Choose a problem','2. Choisissez un problème','2. Оберіть проблему','2. Выберите проблему','2. اختر مشكلة','2. Bir sorun seçin'],
+['Pick one solvable problem to work on. It does not have to be the most serious one.','Choisissez un problème soluble sur lequel travailler. Ce n’est pas forcément le plus grave.','Оберіть одну вирішувану проблему для роботи. Це не обов’язково найсерйозніша.','Выберите одну разрешимую проблему для работы. Необязательно самую серьёзную.','اختر مشكلة واحدة قابلة للحل لتعمل عليها. لا يلزم أن تكون الأخطر.','Üzerinde çalışmak için çözülebilir bir sorun seçin. En ciddisi olması gerekmez.'],
+['Start with an easier problem. An early success builds confidence. Later, come back and tackle a bigger one.','Commencez par un problème plus facile. Un succès rapide donne confiance. Plus tard, revenez en traiter un plus gros.','Почніть із легшої проблеми. Ранній успіх додає впевненості. Пізніше поверніться до більшої.','Начните с более лёгкой проблемы. Ранний успех придаёт уверенности. Позже вернитесь к более крупной.','ابدأ بمشكلة أسهل. النجاح المبكر يبني الثقة. لاحقًا عد لتتناول مشكلة أكبر.','Daha kolay bir sorunla başlayın. Erken başarı güven verir. Sonra daha büyük bir soruna dönün.'],
+['You have no problem tagged both solvable and important. Go back to step 1, look for a part of a problem you could influence, or tag a problem as important.','Aucun problème n’est étiqueté à la fois soluble et important. Revenez à l’étape 1, cherchez une partie sur laquelle vous pouvez agir, ou marquez un problème comme important.','Жодна проблема не позначена і як вирішувана, і як важлива. Поверніться до кроку 1, знайдіть частину, на яку можна вплинути, або позначте проблему як важливу.','Ни одна проблема не отмечена и как разрешимая, и как важная. Вернитесь к шагу 1, найдите часть, на которую можно повлиять, или отметьте проблему как важную.','لا توجد مشكلة موسومة بأنها قابلة للحل ومهمة معًا. ارجع إلى الخطوة 1، وابحث عن جزء يمكنك التأثير فيه، أو ضع على مشكلة وسم «مهمة».','Hem çözülebilir hem önemli olarak etiketlenmiş sorun yok. 1. adıma dönün, etkileyebileceğiniz bir kısım bulun veya bir sorunu önemli olarak etiketleyin.'],
+['3. Define the problem','3. Définissez le problème','3. Визначте проблему','3. Определите проблему','3. حدّد المشكلة','3. Sorunu tanımlayın'],
+['Chosen problem:','Problème choisi :','Обрана проблема:','Выбранная проблема:','المشكلة المختارة:','Seçilen sorun:'],
+['Make it specific and practical. "I feel worthless" or "everything is going wrong" is too big. Answer these to narrow it down.','Soyez précis et concret. « Je me sens nul(le) » ou « tout va mal » est trop large. Répondez à ces questions pour préciser.','Зробіть її конкретною та практичною. «Я почуваюся нікчемним(ою)» чи «усе йде не так» — занадто широко. Дайте відповіді, щоб звузити.','Сделайте её конкретной и практичной. «Я чувствую себя никчёмным(ой)» или «всё идёт не так» — слишком широко. Ответьте на вопросы, чтобы сузить.','اجعلها محددة وعملية. «أشعر أنني عديم القيمة» أو «كل شيء يسير بشكل خاطئ» عبارات عامة جدًا. أجب عن هذه الأسئلة لتضييقها.','Somut ve uygulanabilir olsun. “Kendimi değersiz hissediyorum” veya “her şey ters gidiyor” çok geniştir. Daraltmak için bunları yanıtlayın.'],
+['When does this happen? In what situations?','Quand cela se produit-il ? Dans quelles situations ?','Коли це трапляється? У яких ситуаціях?','Когда это происходит? В каких ситуациях?','متى يحدث هذا؟ وفي أي مواقف؟','Bu ne zaman oluyor? Hangi durumlarda?'],
+['If someone was watching you address the problem, what would they see you doing or not doing about it?','Si quelqu’un vous regardait faire face au problème, que vous verrait-il faire ou ne pas faire ?','Якби хтось спостерігав, як ви вирішуєте проблему, що він побачив би: що ви робите чи не робите з нею?','Если бы кто-то наблюдал, как вы занимаетесь проблемой, что он увидел бы: что вы делаете или не делаете?','لو كان أحد يراقبك وأنت تتعامل مع المشكلة، فماذا سيراك تفعل أو لا تفعل حيالها؟','Biri sizi sorunla uğraşırken izliyor olsaydı, onunla ilgili neler yaptığınızı veya yapmadığınızı görürdü?'],
+['How would your day be different without this problem?','En quoi votre journée serait-elle différente sans ce problème ?','Чим би відрізнявся ваш день без цієї проблеми?','Чем отличался бы ваш день без этой проблемы?','كيف سيختلف يومك دون هذه المشكلة؟','Bu sorun olmasaydı gününüz nasıl farklı olurdu?'],
+['Keep to one problem, and only the parts you can influence. If it has many parts, deal with them one at a time.','Restez sur un seul problème et sur les parties que vous pouvez influencer. S’il a plusieurs parties, traitez-les une à une.','Обирайте одну проблему і лише ті частини, на які можете вплинути. Якщо частин багато, працюйте з ними по одній.','Держитесь одной проблемы и только тех частей, на которые можете повлиять. Если частей много, занимайтесь ими по одной.','التزم بمشكلة واحدة وبالأجزاء التي يمكنك التأثير فيها فقط. إذا كانت لها أجزاء كثيرة فتناولها واحدًا تلو الآخر.','Tek bir soruna ve yalnızca etkileyebileceğiniz kısımlara odaklanın. Birçok parçası varsa teker teker ele alın.'],
+['4. Brainstorm','4. Remue-méninges','4. Мозковий штурм','4. Мозговой штурм','4. العصف الذهني','4. Beyin fırtınası'],
+['Write down as many ideas as possible about possible actions you can take to address the problem. Good or bad, realistic or not. Do not judge them yet.','Notez le plus d’idées possible sur les actions que vous pouvez entreprendre face au problème. Bonnes ou mauvaises, réalistes ou non. Ne les jugez pas encore.','Запишіть якомога більше ідей щодо дій, які ви можете вжити для розв’язання проблеми. Добрих чи поганих, реалістичних чи ні. Поки що не оцінюйте їх.','Запишите как можно больше идей о действиях, которые вы можете предпринять для решения проблемы. Хороших или плохих, реалистичных или нет. Пока не оценивайте их.','اكتب أكبر عدد ممكن من الأفكار حول الإجراءات التي يمكنك اتخاذها لمعالجة المشكلة. جيدة أو سيئة، واقعية أو غير واقعية. لا تحكم عليها الآن.','Sorunu ele almak için atabileceğiniz adımlarla ilgili mümkün olduğunca çok fikir yazın. İyi ya da kötü, gerçekçi ya da değil. Henüz değerlendirmeyin.'],
+['Stuck? Ask yourself: What would I tell a friend in this situation? What have I tried before, even if it did not work? Who could help? What strengths or resources do I already have?','Bloqué(e) ? Demandez-vous : que dirais-je à un ami dans cette situation ? Qu’ai-je déjà essayé, même sans succès ? Qui pourrait m’aider ? Quelles forces ou ressources ai-je déjà ?','Застрягли? Запитайте себе: що б я сказав(ла) другові в такій ситуації? Що я вже пробував(ла), навіть якщо не допомогло? Хто міг би допомогти? Які сильні сторони чи ресурси в мене вже є?','Застряли? Спросите себя: что бы я сказал(а) другу в такой ситуации? Что я уже пробовал(а), даже если не помогло? Кто мог бы помочь? Какие сильные стороны или ресурсы у меня уже есть?','عالق؟ اسأل نفسك: ماذا كنت سأقول لصديق في هذا الموقف؟ ماذا جرّبت من قبل حتى لو لم ينجح؟ من يمكنه المساعدة؟ ما نقاط القوة أو الموارد التي أملكها بالفعل؟','Takıldınız mı? Kendinize sorun: Bu durumdaki bir arkadaşıma ne söylerdim? İşe yaramasa bile daha önce ne denedim? Kim yardım edebilir? Zaten hangi güçlü yanlarım veya kaynaklarım var?'],
+['An idea','Une idée','Ідея','Идея','فكرة','Bir fikir'],
+['New idea','Nouvelle idée','Нова ідея','Новая идея','فكرة جديدة','Yeni fikir'],
+['No ideas yet.','Aucune idée pour l’instant.','Ідей поки немає.','Идей пока нет.','لا توجد أفكار بعد.','Henüz fikir yok.'],
+['5. Decide and choose','5. Décidez et choisissez','5. Ухваліть рішення та оберіть','5. Примите решение и выберите','5. قرّر واختر','5. Karar verin ve seçin'],
+['Now judge each idea. Helpful strategies have very few disadvantages for you or others, and you can actually carry them out.','Évaluez maintenant chaque idée. Les stratégies utiles ont très peu d’inconvénients pour vous ou pour les autres, et vous pouvez réellement les mettre en œuvre.','Тепер оцініть кожну ідею. Корисні стратегії мають дуже мало недоліків для вас чи інших, і ви справді можете їх виконати.','Теперь оцените каждую идею. Полезные стратегии имеют очень мало недостатков для вас и других, и вы действительно можете их выполнить.','قيّم الآن كل فكرة. الاستراتيجيات المفيدة لها عيوب قليلة جدًا عليك أو على الآخرين، ويمكنك تنفيذها فعلًا.','Şimdi her fikri değerlendirin. Yararlı stratejilerin sizin veya başkaları için çok az dezavantajı vardır ve gerçekten uygulayabilirsiniz.'],
+['Think about short-term and long-term effects. Something that feels good now but causes problems later is not a helpful solution.','Pensez aux effets à court et à long terme. Ce qui fait du bien maintenant mais cause des problèmes plus tard n’est pas une bonne solution.','Подумайте про короткострокові й довгострокові наслідки. Те, що допомагає зараз, але створює проблеми пізніше, — не корисне рішення.','Подумайте о краткосрочных и долгосрочных последствиях. То, что помогает сейчас, но создаёт проблемы позже, — не полезное решение.','فكّر في الآثار قصيرة المدى وطويلة المدى. ما يريحك الآن لكنه يسبب مشكلات لاحقًا ليس حلًا مفيدًا.','Kısa ve uzun vadeli etkileri düşünün. Şimdi iyi hissettirip sonra sorun yaratan şey yararlı bir çözüm değildir.'],
+['Few disadvantages, now or later, for me or others','Peu d’inconvénients, maintenant ou plus tard, pour moi ou pour les autres','Мало недоліків, зараз чи пізніше, для мене чи інших','Мало недостатков, сейчас или позже, для меня или других','عيوب قليلة، الآن أو لاحقًا، عليّ أو على الآخرين','Şimdi veya sonra, benim veya başkaları için az dezavantajı var'],
+['I have the time, money, skills or support to do it','J’ai le temps, l’argent, les compétences ou le soutien pour le faire','У мене є час, гроші, навички чи підтримка, щоб це зробити','У меня есть время, деньги, навыки или поддержка, чтобы это сделать','لدي الوقت أو المال أو المهارات أو الدعم لتنفيذها','Bunu yapmak için zamanım, param, becerim veya desteğim var'],
+['Selected','Sélectionné','Обрано','Выбрано','محدد','Seçildi'],
+['Go back and add some ideas first.','Revenez en arrière et ajoutez d’abord des idées.','Поверніться й спершу додайте ідеї.','Вернитесь и сначала добавьте идеи.','ارجع وأضف بعض الأفكار أولًا.','Önce geri dönüp birkaç fikir ekleyin.'],
+['Now choose and click on the solution that works best and press Next.','Choisissez maintenant la solution qui convient le mieux en cliquant dessus, puis appuyez sur Suivant.','Тепер оберіть, клацнувши, рішення, яке підходить найкраще, і натисніть «Далі».','Теперь выберите, нажав на неё, лучшее решение и нажмите «Далее».','اختر الآن بالنقر الحل الأنسب ثم اضغط «التالي».','Şimdi en uygun çözümü tıklayarak seçin ve İleri’ye basın.'],
+['6. Action plan','6. Plan d’action','6. План дій','6. План действий','6. خطة العمل','6. Eylem planı'],
+['Break your chosen solution into small steps and give each a day and time.','Découpez la solution choisie en petites étapes et donnez à chacune un jour et une heure.','Розбийте обране рішення на малі кроки й вкажіть для кожного день і час.','Разбейте выбранное решение на небольшие шаги и укажите для каждого день и время.','قسّم الحل المختار إلى خطوات صغيرة وحدّد لكل خطوة يومًا ووقتًا.','Seçtiğiniz çözümü küçük adımlara bölün ve her birine bir gün ve saat verin.'],
+['Chosen:','Choisi :','Обране:','Выбрано:','المختار:','Seçilen:'],
+['If a step involves talking to someone, practise what you will say first. You can tie steps to a routine, like a meal, so you remember them.','Si une étape implique de parler à quelqu’un, entraînez-vous d’abord à ce que vous direz. Associez les étapes à une habitude, comme un repas, pour y penser.','Якщо крок передбачає розмову з кимось, спершу потренуйте, що скажете. Прив’яжіть кроки до звичного ритму, наприклад до їжі, щоб не забути.','Если шаг предполагает разговор с кем-то, сначала отрепетируйте, что скажете. Привяжите шаги к привычному распорядку, например к еде, чтобы не забыть.','إذا كانت الخطوة تتضمن التحدث مع شخص ما فتدرّب أولًا على ما ستقوله. اربط الخطوات بروتين مثل الوجبات حتى تتذكرها.','Bir adım biriyle konuşmayı içeriyorsa önce ne diyeceğinizi prova edin. Hatırlamak için adımları öğün gibi bir rutine bağlayabilirsiniz.'],
+['Example of an action plan','Exemple de plan d’action','Приклад плану дій','Пример плана действий','مثال على خطة عمل','Eylem planı örneği'],
+['Problem: arguing with my partner every day. Chosen solution: talk to people I trust, then talk to my partner.','Problème : je me dispute chaque jour avec mon conjoint. Solution choisie : parler à des personnes de confiance, puis à mon conjoint.','Проблема: щодня сварюся з партнером. Обране рішення: поговорити з людьми, яким довіряю, а потім із партнером.','Проблема: каждый день ссорюсь с партнёром. Выбранное решение: поговорить с людьми, которым доверяю, а затем с партнёром.','المشكلة: أتشاجر مع شريكي كل يوم. الحل المختار: التحدث مع أشخاص أثق بهم ثم مع شريكي.','Sorun: eşimle her gün tartışıyorum. Seçilen çözüm: güvendiğim kişilerle, sonra eşimle konuşmak.'],
+['Step','Étape','Крок','Шаг','الخطوة','Adım'],
+['Day and time','Jour et heure','День і час','День и время','اليوم والوقت','Gün ve saat'],
+['What I need','Ce dont j’ai besoin','Що мені потрібно','Что мне нужно','ما أحتاجه','İhtiyacım olan'],
+['Talk to my friend Anne about the arguments','Parler des disputes à mon amie Anne','Поговорити з подругою Анною про сварки','Поговорить с подругой Анной о ссорах','التحدث مع صديقتي آنّا عن الشجارات','Arkadaşım Anne ile tartışmalar hakkında konuşmak'],
+['Tuesday, 10:00, after school drop-off','Mardi, 10 h, après avoir déposé les enfants à l’école','Вівторок, 10:00, після того як відведу дітей до школи','Вторник, 10:00, после того как отведу детей в школу','الثلاثاء، 10:00، بعد توصيل الأطفال إلى المدرسة','Salı, 10:00, çocukları okula bıraktıktan sonra'],
+['Time and a quiet place','Du temps et un endroit calme','Час і тихе місце','Время и тихое место','وقت ومكان هادئ','Zaman ve sessiz bir yer'],
+['Ask my mother what she would do','Demander à ma mère ce qu’elle ferait','Запитати маму, що б вона зробила','Спросить маму, что бы она сделала','سؤال أمي عما كانت ستفعله','Annemin ne yapacağını sormak'],
+['Thursday afternoon, when I visit her','Jeudi après-midi, quand je lui rends visite','Четвер по обіді, коли відвідаю її','Четверг днём, когда навещу её','الخميس بعد الظهر عند زيارتها','Perşembe öğleden sonra, onu ziyaret ederken'],
+['Nothing','Rien','Нічого','Ничего','لا شيء','Hiçbir şey'],
+['Tell my partner calmly that I am unhappy about the fighting','Dire calmement à mon conjoint que je suis malheureux(se) à cause des disputes','Спокійно сказати партнеру, що мене засмучують сварки','Спокойно сказать партнёру, что меня расстраивают ссоры','إخبار شريكي بهدوء أنني غير سعيد بسبب الشجار','Eşime tartışmalardan mutsuz olduğumu sakince söylemek'],
+['Saturday morning, when we are both home','Samedi matin, quand nous sommes tous les deux à la maison','Субота зранку, коли ми обоє вдома','Суббота утром, когда мы оба дома','السبت صباحًا عندما نكون كلانا في المنزل','Cumartesi sabahı, ikimiz de evdeyken'],
+['To practise what to say first','M’entraîner d’abord à ce que je dirai','Спершу потренувати, що скажу','Сначала отрепетировать, что скажу','التدرّب أولًا على ما سأقوله','Önce ne diyeceğimi prova etmek'],
+['Your plan','Votre plan','Ваш план','Ваш план','خطتك','Planınız'],
+['e.g. Talk to Anne about the arguments','p. ex. Parler des disputes à Anne','напр. поговорити з Анною про сварки','напр. поговорить с Анной о ссорах','مثال: التحدث مع آنّا عن الشجارات','örn. Anne ile tartışmalar hakkında konuşmak'],
+['e.g. Tuesday, 10:00','p. ex. mardi, 10 h','напр. вівторок, 10:00','напр. вторник, 10:00','مثال: الثلاثاء، 10:00','örn. Salı, 10:00'],
+['e.g. Time and a quiet place','p. ex. du temps et un endroit calme','напр. час і тихе місце','напр. время и тихое место','مثال: وقت ومكان هادئ','örn. zaman ve sessiz bir yer'],
+['Remove step','Supprimer l’étape','Видалити крок','Удалить шаг','حذف الخطوة','Adımı kaldır'],
+['Add a step','Ajouter une étape','Додати крок','Добавить шаг','إضافة خطوة','Adım ekle'],
+['7. Review','7. Bilan','7. Огляд','7. Обзор','7. المراجعة','7. Gözden geçirme'],
+['Come back after you have tried your plan (the manual does this at the next session, about a week later).','Revenez après avoir essayé votre plan (le manuel le fait à la séance suivante, environ une semaine plus tard).','Поверніться після того, як спробуєте свій план (за посібником це робиться на наступній сесії, приблизно через тиждень).','Вернитесь после того, как попробуете свой план (по руководству это делается на следующей сессии, примерно через неделю).','عد بعد أن تجرّب خطتك (الدليل يفعل ذلك في الجلسة التالية، بعد نحو أسبوع).','Planınızı denedikten sonra geri dönün (kılavuzda bu, yaklaşık bir hafta sonraki oturumda yapılır).'],
+['What did I do?','Qu’ai-je fait ?','Що я зробив(ла)?','Что я сделал(а)?','ماذا فعلت؟','Ne yaptım?'],
+['What effect did it have on the original problem?','Quel effet cela a-t-il eu sur le problème de départ ?','Який це мало вплив на початкову проблему?','Какое это оказало влияние на исходную проблему?','ما تأثير ذلك على المشكلة الأصلية؟','Bunun asıl sorun üzerinde nasıl bir etkisi oldu?'],
+['What difficulties came up?','Quelles difficultés sont apparues ?','Які виникли труднощі?','Какие возникли трудности?','ما الصعوبات التي ظهرت؟','Hangi zorluklar çıktı?'],
+['What will I do next week to keep managing it?','Que ferai-je la semaine prochaine pour continuer à gérer ce problème ?','Що я робитиму наступного тижня, щоб і далі з цим справлятися?','Что я буду делать на следующей неделе, чтобы продолжать с этим справляться?','ماذا سأفعل الأسبوع القادم لمواصلة التعامل معها؟','Bunu yönetmeye devam etmek için gelecek hafta ne yapacağım?'],
+['At the start you gave a score of','Au début, vous avez donné la note de','Спочатку ви поставили оцінку','В начале вы поставили оценку','في البداية أعطيت درجة','Başta şu puanı verdiniz:'],
+['out of 10.','sur 10.','з 10.','из 10.','من 10.','/ 10.'],
+['Now: how do you feel about being able to solve your problem? Give a score.','Maintenant : dans quelle mesure vous sentez-vous capable de résoudre votre problème ? Donnez une note.','Тепер: наскільки ви відчуваєте, що здатні розв’язати свою проблему? Поставте оцінку.','Теперь: насколько вы чувствуете, что способны решить свою проблему? Поставьте оценку.','الآن: ما مدى شعورك بقدرتك على حل مشكلتك؟ أعطِ درجة.','Şimdi: sorununuzu çözebileceğinizi ne kadar hissediyorsunuz? Bir puan verin.'],
+['Partial progress counts. Reducing a problem or changing how you respond to it is a real result. You do not need to solve it completely.','Un progrès partiel compte. Réduire un problème ou changer votre façon d’y réagir est un vrai résultat. Vous n’avez pas besoin de le résoudre complètement.','Часткове просування теж важливе. Зменшити проблему чи змінити свою реакцію на неї — справжній результат. Не обов’язково вирішувати її повністю.','Частичный прогресс тоже важен. Уменьшить проблему или изменить свою реакцию на неё — реальный результат. Не обязательно решать её полностью.','التقدم الجزئي مهم. تقليل المشكلة أو تغيير طريقة استجابتك لها نتيجة حقيقية. لا تحتاج إلى حلها بالكامل.','Kısmi ilerleme de sayılır. Bir sorunu azaltmak veya ona verdiğiniz tepkiyi değiştirmek gerçek bir sonuçtur. Sorunu tamamen çözmeniz gerekmez.'],
+['Start another round (from step 3)','Commencer un autre tour (à partir de l’étape 3)','Почати ще одне коло (з кроку 3)','Начать ещё один круг (с шага 3)','بدء جولة أخرى (من الخطوة 3)','Yeni bir tur başlat (3. adımdan)'],
+['Download summary','Télécharger le résumé','Завантажити підсумок','Скачать итоги','تنزيل الملخص','Özeti indir'],
+['Print','Imprimer','Друк','Печать','طباعة','Yazdır'],
+['Start over','Recommencer','Почати спочатку','Начать заново','البدء من جديد','Baştan başla'],
+['Clear everything and start over?','Tout effacer et recommencer ?','Очистити все та почати спочатку?','Очистить всё и начать заново?','مسح كل شيء والبدء من جديد؟','Her şeyi silip baştan başlansın mı?'],
+['Score at the start','Note au début','Оцінка на початку','Оценка в начале','الدرجة في البداية','Başlangıç puanı'],
+['Score now','Note actuelle','Оцінка зараз','Оценка сейчас','الدرجة الآن','Şimdiki puan'],
+['Kuri the squirrel, your guide','Kuri l’écureuil, votre guide','Курі, білочка-помічниця','Кури, белочка-помощница','كوري السنجاب، مرشدك','Kuri sincap, rehberiniz'],
+['Hi, I am Kuri. I will walk with you through this, one small step at a time. First, tell me how you feel and list what is on your mind.','Bonjour, je suis Kuri. Je vous accompagne pas à pas. D’abord, dites-moi comment vous vous sentez et notez ce qui vous préoccupe.','Привіт, я Курі. Я піду поруч із вами крок за кроком. Спершу розкажіть, як ви почуваєтеся, і запишіть, що вас турбує.','Привет, я Кури. Я пройду с вами этот путь шаг за шагом. Сначала расскажите, как вы себя чувствуете, и запишите, что вас тревожит.','مرحبًا، أنا كوري. سأرافقك خطوة بخطوة. أولًا، أخبرني كيف تشعر واكتب ما يشغل بالك.','Merhaba, ben Kuri. Adım adım yanınızda olacağım. Önce nasıl hissettiğinizi söyleyin ve aklınızdakileri yazın.'],
+['Well done. Now pick just one problem. A small one is a good place to start.','Bravo. Choisissez maintenant un seul problème. Un petit problème est un bon début.','Чудово. Тепер оберіть лише одну проблему. З невеликої добре почати.','Отлично. Теперь выберите только одну проблему. С небольшой хорошо начать.','أحسنت. اختر الآن مشكلة واحدة فقط. المشكلة الصغيرة بداية جيدة.','Aferin. Şimdi yalnızca bir sorun seçin. Küçük bir sorun iyi bir başlangıçtır.'],
+['Let us look at it closely. Take your time. There are no wrong answers here.','Regardons-le de plus près. Prenez votre temps. Il n’y a pas de mauvaises réponses ici.','Придивімося до неї уважніше. Не поспішайте. Тут немає неправильних відповідей.','Давайте рассмотрим её поближе. Не торопитесь. Здесь нет неправильных ответов.','لننظر فيها عن قرب. خذ وقتك. لا توجد إجابات خاطئة هنا.','Ona yakından bakalım. Acele etmeyin. Burada yanlış cevap yok.'],
+['Let us gather ideas like acorns. Every idea counts, even the silly ones.','Récoltons des idées comme des glands. Chaque idée compte, même les plus folles.','Збираймо ідеї, як жолуді. Кожна ідея важлива, навіть кумедна.','Давайте собирать идеи, как желуди. Каждая идея важна, даже забавная.','لنجمع الأفكار كما تُجمع حبات البلوط. كل فكرة مهمة، حتى الطريفة منها.','Fikirleri meşe palamudu gibi toplayalım. Her fikir değerlidir, komik olanlar bile.'],
+['Now we sort the acorns. Which ideas are kind to you and really doable?','Maintenant, trions les glands. Quelles idées sont bonnes pour vous et vraiment réalisables ?','Тепер розсортуємо жолуді. Які ідеї добрі для вас і справді здійсненні?','Теперь рассортируем желуди. Какие идеи добры к вам и действительно выполнимы?','الآن نفرز حبات البلوط. أي الأفكار لطيفة معك وقابلة للتنفيذ فعلًا؟','Şimdi palamutları ayıralım. Hangi fikirler size iyi gelir ve gerçekten yapılabilir?'],
+['Small steps are the easiest. Pick a day and time for each one.','Les petits pas sont les plus faciles. Choisissez un jour et une heure pour chacun.','Маленькі кроки — найлегші. Оберіть день і час для кожного.','Маленькие шаги — самые лёгкие. Выберите день и время для каждого.','الخطوات الصغيرة أسهل. اختر يومًا ووقتًا لكل خطوة.','Küçük adımlar en kolayıdır. Her biri için bir gün ve saat seçin.'],
+['However it went, you tried, and that matters. Let us see what you learned.','Quel que soit le résultat, vous avez essayé, et c’est important. Voyons ce que vous avez appris.','Як би все не минуло, ви спробували, і це важливо. Подивімося, чого ви навчилися.','Как бы всё ни прошло, вы попробовали, и это важно. Посмотрим, чему вы научились.','مهما كانت النتيجة، لقد حاولت، وهذا مهم. لنرَ ما تعلمته.','Sonuç ne olursa olsun denediniz ve bu önemli. Neler öğrendiğinize bakalım.']
+];
+const T={};['fr','uk','ru','ar','tr'].forEach((c,j)=>{T[c]={};ROWS.forEach(r=>{T[c][r[0]]=r[j+1]})});
+const tr=k=>(T[S.lang]&&T[S.lang][k])||k;
+function loc(root){
+ const d=T[S.lang]||{},w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);let n;
+ while(n=w.nextNode()){
+  if(n.parentNode.tagName==='SCRIPT'||n.parentNode.tagName==='STYLE')continue;
+  if(n.__o===undefined)n.__o=n.nodeValue;
+  const k=n.__o.trim(),v=d[k]?n.__o.replace(k,()=>d[k]):n.__o;
+  if(n.nodeValue!==v)n.nodeValue=v;
+ }
+ root.querySelectorAll('[placeholder],[aria-label]').forEach(el=>{['placeholder','aria-label'].forEach(a=>{if(el.hasAttribute(a)){const o=el['_'+a]=el['_'+a]||el.getAttribute(a);el.setAttribute(a,d[o]||o)}})});
+ document.documentElement.lang=S.lang;document.documentElement.dir=S.lang==='ar'?'rtl':'ltr';document.title=tr('Managing Problems');
+}
+const MSG=['Hi, I am Kuri. I will walk with you through this, one small step at a time. First, tell me how you feel and list what is on your mind.','Well done. Now pick just one problem. A small one is a good place to start.','Let us look at it closely. Take your time. There are no wrong answers here.','Let us gather ideas like acorns. Every idea counts, even the silly ones.','Now we sort the acorns. Which ideas are kind to you and really doable?','Small steps are the easiest. Pick a day and time for each one.','However it went, you tried, and that matters. Let us see what you learned.'];
+const SQ='<svg viewBox="0 0 100 100" width="84" height="84" role="img" aria-label="Kuri the squirrel, your guide"><ellipse cx="78" cy="58" rx="14" ry="28" transform="rotate(18 78 58)" fill="#d9a679"/><ellipse cx="80" cy="55" rx="6" ry="19" transform="rotate(18 80 55)" fill="#efd0ad"/><ellipse cx="41" cy="91" rx="8" ry="3.5" fill="#b9794a"/><ellipse cx="58" cy="91" rx="8" ry="3.5" fill="#b9794a"/><ellipse cx="50" cy="70" rx="19" ry="22" fill="#c98b5a"/><ellipse cx="50" cy="75" rx="11" ry="15" fill="#f6e6d2"/><circle cx="36" cy="25" r="6.5" fill="#c98b5a"/><circle cx="36" cy="25" r="3" fill="#f0c9a6"/><circle cx="61" cy="25" r="6.5" fill="#c98b5a"/><circle cx="61" cy="25" r="3" fill="#f0c9a6"/><circle cx="48.5" cy="40" r="18" fill="#c98b5a"/><ellipse cx="48.5" cy="46" rx="11" ry="9" fill="#f6e6d2"/><circle cx="41" cy="39" r="2.4" fill="#1a1a1c"/><circle cx="56" cy="39" r="2.4" fill="#1a1a1c"/><circle cx="41.8" cy="38.2" r=".8" fill="#fff"/><circle cx="56.8" cy="38.2" r=".8" fill="#fff"/><circle cx="36.5" cy="46" r="3" fill="#e8a39b" opacity=".6"/><circle cx="60.5" cy="46" r="3" fill="#e8a39b" opacity=".6"/><ellipse cx="48.5" cy="44" rx="2" ry="1.4" fill="#5a3a2a"/><path d="M45.5 48q3 3 6 0" stroke="#5a3a2a" stroke-width="1.2" fill="none" stroke-linecap="round"/><ellipse cx="49" cy="68" rx="7" ry="8" fill="#b07a4a"/><path d="M41 65q8-10 16 0z" fill="#6b4a32"/><circle cx="42" cy="68" r="3.5" fill="#c98b5a"/><circle cx="57" cy="68" r="3.5" fill="#c98b5a"/></svg>';
+const mascot=()=>`<div class="mascot">${SQ}<p class="say">${MSG[S.step]}</p></div>`;
+const scale=(k,q)=>`<fieldset class="scale"><legend>${q}</legend><div class="sc">${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<button data-act="sc" data-k="${k}" data-n="${n}" aria-pressed="${S[k]===n}" class="${S[k]===n?'on':''}">${n}</button>`).join('')}</div><div class="lab"><span>0 = not at all able</span><span>10 = completely able</span></div></fieldset>`;
+function body(){
+ switch(S.step){
+ case 0:{
+  const list=S.problems.map((p,i)=>`<div class="item ${p.c}${p.imp==='unimportant'?' dim':''}"><span>${esc(p.t)}</span>
+   <select data-sel="${i}" aria-label="Solvable or unsolvable"><option value="solvable"${p.c==='solvable'?' selected':''}>Solvable</option><option value="unsolvable"${p.c==='unsolvable'?' selected':''}>Unsolvable</option></select>
+   <select data-imp="${i}" aria-label="Important or unimportant"><option value="important"${p.imp!=='unimportant'?' selected':''}>Important</option><option value="unimportant"${p.imp==='unimportant'?' selected':''}>Unimportant</option></select>
+   <button class="btn x" data-act="del" data-i="${i}" aria-label="Remove">Remove</button></div>`).join('');
+  return `<h2>1. List your problems</h2>
+  ${scale('score0','Before you start: how do you feel about being able to solve your problems? Give a score.')}
+  <p>Write down the problems or concerns you have right now, big or small. Then tag each one twice:</p>
+  <div class="cols cols2"><div><b style="color:var(--teal)">Solvable or unsolvable</b><br>Solvable: you have some control or influence, even over just part of it. Unsolvable: you cannot change it. Check whether any part of it can be changed, often how you respond to it.</div><div><b style="color:var(--blue)">Important or unimportant</b><br>Important: it matters to you and is causing you concern. Unimportant: not a concern for you right now.</div></div>
+  <div class="tip">You will work on a problem that is both important and solvable. Feeling like nothing can be solved is common. If you doubt a problem is solvable, ask: "is there any part of this I could influence?"</div>
+  <div class="row"><input type="text" id="np" placeholder="Describe a problem" aria-label="New problem"><select id="nc" aria-label="Solvable or unsolvable"><option value="solvable">Solvable</option><option value="unsolvable">Unsolvable</option></select><select id="nm" aria-label="Important or unimportant"><option value="important">Important</option><option value="unimportant">Unimportant</option></select><button class="btn" data-act="add">Add</button></div>
+  <div class="chips">${EX.map((e,i)=>`<button class="chip" data-act="ex" data-i="${i}">${esc(e)}</button>`).join('')}</div>
+  ${list||'<p style="color:var(--mute)">No problems listed yet. Add one above or tap an example.</p>'}`}
+ case 1:{
+  const s=solv();
+  return `<h2>2. Choose a problem</h2>
+  <p>Pick one solvable problem to work on. It does not have to be the most serious one.</p>
+  <div class="tip">Start with an easier problem. An early success builds confidence. Later, come back and tackle a bigger one.</div>
+  ${s.length?s.map(p=>`<label class="opt card${S.chosen===p.i?' pick':''}"><input type="radio" name="ch" data-ch="${p.i}"${S.chosen===p.i?' checked':''}> ${esc(p.t)}</label>`).join(''):'<p>You have no problem tagged both solvable and important. Go back to step 1, look for a part of a problem you could influence, or tag a problem as important.</p>'}`}
+ case 2:return `<h2>3. Define the problem</h2>
+  ${S.problems[S.chosen]?`<p><b>Chosen problem:</b> ${esc(S.problems[S.chosen].t)}</p>`:''}
+  <p>Make it specific and practical. "I feel worthless" or "everything is going wrong" is too big. Answer these to narrow it down.</p>
+  <label for="d1">When does this happen? In what situations?</label><textarea id="d1" data-k="def.when">${esc(S.def.when)}</textarea>
+  <label for="d2">If someone was watching you address the problem, what would they see you doing or not doing about it?</label><textarea id="d2" data-k="def.look">${esc(S.def.look)}</textarea>
+  <label for="d3">How would your day be different without this problem?</label><textarea id="d3" data-k="def.diff">${esc(S.def.diff)}</textarea>
+  <label for="d4">Define your problem and write how it makes you feel</label><textarea id="d4" data-k="def.text" style="min-height:120px">${esc(S.def.text)}</textarea>
+  <div class="tip">Keep to one problem, and only the parts you can influence. If it has many parts, deal with them one at a time.</div>`
+ case 3:return `<h2>4. Brainstorm</h2>
+  <p>Write down as many ideas as possible about possible actions you can take to address the problem. Good or bad, realistic or not. Do not judge them yet.</p>
+  <div class="tip">Stuck? Ask yourself: What would I tell a friend in this situation? What have I tried before, even if it did not work? Who could help? What strengths or resources do I already have?</div>
+  <div class="row"><input type="text" id="ni" placeholder="An idea" aria-label="New idea"><button class="btn" data-act="idea">Add</button></div>
+  ${S.ideas.map((x,i)=>`<div class="item"><span>${esc(x.t)}</span><button class="btn x" data-act="deli" data-i="${i}">Remove</button></div>`).join('')||'<p style="color:var(--mute)">No ideas yet.</p>'}`
+ case 4:return `<h2>5. Decide and choose</h2>
+  <p>Now judge each idea. Helpful strategies have very few disadvantages for you or others, and you can actually carry them out.</p>
+  <div class="tip">Think about short-term and long-term effects. Something that feels good now but causes problems later is not a helpful solution.</div>
+  ${S.ideas.map((x,i)=>`<div class="card${x.pick?' pick':''}" data-act="pick" data-i="${i}" role="button" tabindex="0" aria-pressed="${!!x.pick}"><b>${esc(x.t)}</b>
+   <label class="opt"><input type="checkbox" data-f="short" data-i="${i}"${x.short?' checked':''}> Few disadvantages, now or later, for me or others</label>
+   <label class="opt"><input type="checkbox" data-f="doable" data-i="${i}"${x.doable?' checked':''}> I have the time, money, skills or support to do it</label>
+   ${x.pick?'<div class="sel">Selected</div>':''}</div>`).join('')||'<p>Go back and add some ideas first.</p>'}
+  <p style="margin-top:16px"><b>Now choose and click on the solution that works best and press Next.</b></p>`
+ case 5:return `<h2>6. Action plan</h2>
+  <p>Break your chosen solution into small steps and give each a day and time.</p>
+  <div class="tip"><b>Chosen:</b> ${picks().map(x=>esc(x.t)).join('; ')}<br>If a step involves talking to someone, practise what you will say first. You can tie steps to a routine, like a meal, so you remember them.</div>
+  <div class="ex"><b>Example of an action plan</b><br>Problem: arguing with my partner every day. Chosen solution: talk to people I trust, then talk to my partner.
+   <div class="tw"><table><tr><th>Step</th><th>Day and time</th><th>What I need</th></tr>
+   <tr><td>Talk to my friend Anne about the arguments</td><td>Tuesday, 10:00, after school drop-off</td><td>Time and a quiet place</td></tr>
+   <tr><td>Ask my mother what she would do</td><td>Thursday afternoon, when I visit her</td><td>Nothing</td></tr>
+   <tr><td>Tell my partner calmly that I am unhappy about the fighting</td><td>Saturday morning, when we are both home</td><td>To practise what to say first</td></tr></table></div></div>
+  <p><b>Your plan</b></p>
+  ${S.plan.map((r,i)=>`<div class="card"><label for="t${i}" style="margin-top:0">Step</label><input type="text" id="t${i}" data-k="plan.${i}.task" value="${esc(r.task)}" placeholder="e.g. Talk to Anne about the arguments">
+   <div class="cols cols2"><div><label for="w${i}">Day and time</label><input type="text" id="w${i}" data-k="plan.${i}.when" value="${esc(r.when)}" placeholder="e.g. Tuesday, 10:00"></div><div><label for="n${i}">What I need</label><input type="text" id="n${i}" data-k="plan.${i}.need" value="${esc(r.need)}" placeholder="e.g. Time and a quiet place"></div></div>
+   <button class="btn x" data-act="delp" data-i="${i}">Remove step</button></div>`).join('')}
+  <button class="btn alt" data-act="step">Add a step</button>`
+ case 6:return `<h2>7. Review</h2>
+  <p>Come back after you have tried your plan (the manual does this at the next session, about a week later).</p>
+  <label for="v1">What did I do?</label><textarea id="v1" data-k="rev.did">${esc(S.rev.did)}</textarea>
+  <label for="v2">What effect did it have on the original problem?</label><textarea id="v2" data-k="rev.effect">${esc(S.rev.effect)}</textarea>
+  <label for="v3">What difficulties came up?</label><textarea id="v3" data-k="rev.hard">${esc(S.rev.hard)}</textarea>
+  <label for="v4">What will I do next week to keep managing it?</label><textarea id="v4" data-k="rev.next">${esc(S.rev.next)}</textarea>
+  ${S.score0!==null?'<p>At the start you gave a score of <b>'+S.score0+'</b> out of 10.</p>':''}${scale('score1','Now: how do you feel about being able to solve your problem? Give a score.')}<div class="tip">Partial progress counts. Reducing a problem or changing how you respond to it is a real result. You do not need to solve it completely.</div>
+  <div class="row"><button class="btn" data-act="next">Start another round (from step 3)</button><button class="btn alt" data-act="dl">Download summary</button><button class="btn alt" data-act="print">Print</button><button class="btn alt" data-act="reset">Start over</button></div>`}
+}
+function render(){
+ $('rail').innerHTML=STEPS.map((s,i)=>`<button data-go="${i}" class="${i===S.step?'on':''}${i<S.step?' done':''}"><b>${i+1}</b>${s}</button>`).join('');
+ $('main').innerHTML=mascot()+body()+`<div class="err" id="err" role="alert"></div><div class="nav"><button class="btn alt" data-act="back"${S.step===0?' disabled style="visibility:hidden"':''}>Back</button>${S.step<6?'<button class="btn" data-act="fwd">Next</button>':''}</div>`;
+ save();loc(document.body);
+}
+function check(){
+ if(S.step===0&&S.score0===null)return'Give your score first.';
+ if(S.step===0&&!solv().length)return'Add at least one problem that is both solvable and important.';
+ if(S.step===1&&(S.chosen===null||!S.problems[S.chosen]||S.problems[S.chosen].c!=='solvable'))return'Choose one problem.';
+ if(S.step===2&&!S.def.text.trim())return'Define your problem and write how it makes you feel';
+ if(S.step===3&&S.ideas.length<2)return'Add at least two ideas.';
+ if(S.step===4&&!picks().length)return'Choose at least one idea.';
+ if(S.step===5&&!S.plan.some(r=>r.task.trim()&&r.when.trim()))return'Add at least one step with a day and time.';
+ return'';
+}
+function go(n){S.step=n;render();window.scrollTo(0,0)}
+function summary(){
+ const f=(k,v)=>tr(k)+': '+((v===null||v===undefined||v==='')?'-':v);
+ const L=[tr('Managing Problems').toUpperCase(),'',
+ ...[['Solvable',p=>p.c==='solvable'],['Unsolvable',p=>p.c==='unsolvable'],['Important',p=>p.imp!=='unimportant'],['Unimportant',p=>p.imp==='unimportant']].map(([n,fn])=>f(n,S.problems.filter(fn).map(p=>p.t).join('; '))),
+ f('Score at the start',S.score0)+' / 10',f('Score now',S.score1)+' / 10','',
+ tr('Chosen problem:')+' '+(S.problems[S.chosen]?.t||'-'),f('Define your problem and write how it makes you feel',S.def.text),'',
+ f('Brainstorm',S.ideas.map(x=>x.t).join('; ')),tr('Chosen:')+' '+(picks().map(x=>x.t).join('; ')||'-'),'',tr('Action plan')+':',
+ ...S.plan.map(r=>`- ${r.task} | ${r.when} | ${tr('What I need')}: ${r.need}`),'',
+ tr('Review'),f('What did I do?',S.rev.did),f('What effect did it have on the original problem?',S.rev.effect),f('What difficulties came up?',S.rev.hard),f('What will I do next week to keep managing it?',S.rev.next)];
+ return L.join('\n');
+}
+function addProblem(t,c,imp){t=t.trim();if(t){S.problems.push({t,c,imp});render()}}
+document.addEventListener('click',e=>{
+ const g=e.target.closest('[data-go]');if(g){go(+g.dataset.go);return}
+ const b=e.target.closest('[data-act]');if(!b)return;const a=b.dataset.act,i=+b.dataset.i;
+ if(a==='add')addProblem($('np').value,$('nc').value,$('nm').value);
+ else if(a==='sc'){S[b.dataset.k]=+b.dataset.n;render()}
+ else if(a==='pick'){if(e.target.closest('label,input'))return;S.ideas[i].pick=!S.ideas[i].pick;render();const c=document.querySelector('[data-act=pick][data-i="'+i+'"]');if(c)c.focus()}
+ else if(a==='ex')addProblem(tr(EX[i]),'solvable','important');
+ else if(a==='del'){S.problems.splice(i,1);if(S.chosen===i)S.chosen=null;else if(S.chosen>i)S.chosen--;render()}
+ else if(a==='idea'){const t=$('ni').value.trim();if(t){S.ideas.push({t,short:false,doable:false,pick:false});render();$('ni').focus()}}
+ else if(a==='deli'){S.ideas.splice(i,1);render()}
+ else if(a==='step'){S.plan.push({task:'',when:'',need:''});render()}
+ else if(a==='delp'){S.plan.splice(i,1);render()}
+ else if(a==='fwd'){const m=check();if(m){$('err').textContent=tr(m)}else{if(S.step===4&&!S.plan.length)S.plan.push({task:'',when:'',need:''});go(S.step+1)}}
+ else if(a==='back')go(S.step-1);
+ else if(a==='next'){S.past.push({problem:S.problems[S.chosen]?.t,def:S.def.text,plan:S.plan,rev:S.rev});S.round++;S.def={when:'',look:'',diff:'',text:''};S.ideas=[];S.plan=[];S.rev={did:'',effect:'',hard:'',next:''};S.score1=null;go(2)}
+ else if(a==='dl'){const u=URL.createObjectURL(new Blob([summary()],{type:'text/plain;charset=utf-8'}));const l=document.createElement('a');l.href=u;l.download='managing-problems.txt';l.click();URL.revokeObjectURL(u)}
+ else if(a==='print')window.print();
+ else if(a==='reset'&&confirm(tr('Clear everything and start over?'))){S=Object.assign(blank(),{lang:S.lang});render()}
+});
+document.addEventListener('change',e=>{
+ const t=e.target;
+ if(t.dataset.sel!==undefined){S.problems[+t.dataset.sel].c=t.value;render()}
+ else if(t.dataset.imp!==undefined){S.problems[+t.dataset.imp].imp=t.value;render()}
+ else if(t.dataset.ch!==undefined){S.chosen=+t.dataset.ch;render()}
+ else if(t.dataset.f){S.ideas[+t.dataset.i][t.dataset.f]=t.checked;render()}
+});
+document.addEventListener('input',e=>{
+ const k=e.target.dataset.k;if(!k)return;const p=k.split('.');
+ if(p[0]==='plan')S.plan[+p[1]][p[2]]=e.target.value;else S[p[0]][p[1]]=e.target.value;save();
+});
+document.addEventListener('keydown',e=>{
+ if(e.target.dataset&&e.target.dataset.act==='pick'&&(e.key==='Enter'||e.key===' ')){e.preventDefault();e.target.click();return}
+ if(e.key!=='Enter')return;
+ if(e.target.id==='np')addProblem(e.target.value,$('nc').value,$('nm').value);
+ if(e.target.id==='ni')document.querySelector('[data-act=idea]').click();
+});
+$('lang').value=S.lang;
+$('lang').addEventListener('change',e=>{S.lang=e.target.value;render()});
+render();
+</script>
+</body>
+</html>
